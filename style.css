@@ -461,9 +461,9 @@ strong{
   border: none;
   color: white;
   background-color: rgb(194, 81, 194);
+  border-radius: 10px;
   
 }
 .connect__button__btn:hover {
   background-color: rgb(231, 150, 231);
-
 }
