@@ -1,34 +1,16 @@
 $(".addcertbtn").prop('disabled', true)
 $(".Course__remove__btn").prop('disabled', true)
 $(".addcoursebtn").prop('disabled', true)
-function add(n){
-  for(var i=0;i<n;i++){
-  const course = document.createElement('div')
-  course.classList.add('course')
-  course.innerHTML =
-  `<div class="course__image">
-    <img id="image${i}" src="" alt="course image preview">
-  </div>
-  <div class="courseinfo">
-    <h2 id="name${i}" class="courseinfo__name"></h2>
-    <p id="id${i}" class="courseinfo__id">ID: </p>
-    <p id="issued${i}" class="courseinfo__issued">Issued by: Vietnam Institute for Advanced Study in Mathematics (VIASM)</p>
-    <p id="address${i}" class="courseinfo__address">Address: }</p>
-    <p class="courseinfo__info">Info: <a id="info${i}" href=""></a></p>
-  </div>
-  <div class="course__button">
-    <button onclick="gotoProgram(${i})" class="gotocert">Add</button>
-  </div>`
-  $("#courses").append(course)
-}}
-
-document.querySelector('.backtocourse').addEventListener('click',function(){
-  $('.certblock').css('left','50%')
-})
-
-var web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/")                       
-const lay1Address = "0x1094b15Cbd1Cb52E86c7CdbE149488df4f3556cf"
-const lay2Address = "0xFBbACE0EE78894cdAa0056AA545C647848A95dB6"
+var web3
+var ownerAddress
+var lay1con
+var lay2con
+var findByAddress
+var accounts
+var chainId
+var isConnectToMetamask          
+const lay1Address = "0x8747C81f78ed53EE20E10014109c1bFda529Ca13"
+const lay2Address = "0x1A1e755b51fB6e9b1F44Fc7F72F3712018442694"
 const lay1Abi = [
 	{
 		"inputs": [],
@@ -996,126 +978,113 @@ const lay3Abi = [
 		"type": "function"
 	}
 ]
-var lay1con = new web3.eth.Contract(lay1Abi, lay1Address)
-var lay2con = new web3.eth.Contract(lay2Abi, lay2Address)
 
-var ownerAddress
-lay2con.methods.owner().call((err, _owner) => {
-	ownerAddress = _owner
-	$("#ownerAddress").html("Owner Address: "+_owner)
-})
-
-lay2con.methods.programCount().call((err, prgcount) => {
-	add(prgcount)
-	for(let i = 0; i < prgcount; i++) {
-		lay2con.methods.allPrograms(i).call((err,program) => {
-			const lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
-			$("#address"+String(i)).html("Address: " + program.programContractAddress)
-			lay3con.methods.programId().call((err, _id) => {
-				$("#id"+String(i)).html("Id: "+_id)
+window.addEventListener('load', async() => {
+	await ethereum._metamask.isUnlocked().then(async(value) => {
+		console.log(value)
+		isConnectToMetamask = value
+		if(value) {
+			console.log("You have Metamask")
+			accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+			//chainId = await ethereum.request({ method: 'eth_chainId' });
+			await ethereum.request({ method: 'eth_chainId' }).then(_chainId => {
+				chainId = _chainId;
+				if(_chainId == "0x61"){
+					web3 = new Web3(window.ethereum);
+					startApp()
+					return true;
+				} else {
+					ethereum.request({
+						method: 'wallet_addEthereumChain',
+						params: [{ "chainId": "0x61", "chainName": "BSC testnet", "rpcUrls": ["https://data-seed-prebsc-1-s1.binance.org:8545/"], "nativeCurrency": { "name": "Binance Coin", "symbol": "BNB", "decimals": 18 } }]
+					})
+					web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/")
+					startApp()
+					return true;
+				}
 			})
-			lay3con.methods.programName().call((err, _name) => {
-				$("#name"+String(i)).html(_name)
-			})
-			lay3con.methods.link().call((err, _link) => {
-				$("#info"+String(i)).html(_link)
-			})
-			lay3con.methods.programPic().call((err, _pic) => {
-				$("#image"+String(i)).attr("src", "https://gateway.pinata.cloud/ipfs/"+_pic)
-			})
-		})
-	}
-})
-var findByAddress
-function gotoProgram(n) {
-  $('.certblock').css('left','-50%')
-  lay2con.methods.allPrograms(n).call((err,program) => {
-		findByAddress = program.programContractAddress
-    let lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
-		$('.courseinfo__add__address').html("Address: " + program.programContractAddress)
-		lay3con.methods.programId().call((err, _id) => {
-			$('.courseinfo__add__id').html("Id: "+_id)
-		})
-		lay3con.methods.programName().call((err, _name) => {
-			$('.courseinfo__add__name').html(_name)
-		})
-		lay3con.methods.link().call((err, _link) => {
-			$('.courseinfo__add__info__a').html(_link)
-		})
-		lay3con.methods.programPic().call((err, _pic) => {
-			$('.course__add__image__src').attr("src", "https://gateway.pinata.cloud/ipfs/"+_pic)
-		})
+		} else {
+			console.log("pls install metamask")
+    		web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/")
+			startApp()
+			return false;
+		}
 	})
-	setTimeout(function(){
-		const backtv = document.querySelector('.backtocourse')
-		backtv.scrollIntoView();
-		const backtv1 = document.querySelector('body')
-		backtv1.scrollIntoView();
-	  },1500)
-  
-}
+})
 
-var accounts
-var chainId
-$(".connect__button__btn").click(async() => {
-	accounts = await ethereum.request({ method: 'eth_requestAccounts' });
-	chainId = await ethereum.request({ method: 'eth_chainId' });
-	web3 = await new Web3(window.ethereum);
+function startApp() {
 	lay1con = new web3.eth.Contract(lay1Abi, lay1Address)
 	lay2con = new web3.eth.Contract(lay2Abi, lay2Address)
-	if(accounts[0].toLowerCase() === ownerAddress.toLowerCase()) {
-		$(".connect__button__btn").html("Ready")
-		$(".connect__button__btn").css('background-color','rgb(132, 255, 116)')
-		$(".connect__button__btn").css('color','black')
-		$(".addcertbtn").html("Add")
-		$(".Course__remove__btn").html("Remove")
-		$(".addcoursebtn").html("Add")
-		$(".addcertbtn").prop('disabled', false)
-		$(".Course__remove__btn").prop('disabled', false)
-		$(".addcoursebtn").prop('disabled', false)
-	} else {
-		$(".connect__button__btn").html("Wrong Account")
-	}
-	ethereum.request({
-        method: 'wallet_addEthereumChain',
-        params: [{ "chainId": "0x61", "chainName": "BSC testnet", "rpcUrls": ["https://data-seed-prebsc-1-s1.binance.org:8545/"], "nativeCurrency": { "name": "Binance Coin", "symbol": "BNB", "decimals": 18 } }
-      ]});
-})
-window.ethereum.on('chainChanged', function(_chainId) {
-	chainId = _chainId;
-	if(_chainId == "0x61"){
-		if(accounts[0].toLowerCase() === ownerAddress.toLowerCase()) {
-			$(".connect__button__btn").html("Ready")
-			$(".connect__button__btn").css('background-color','rgb(132, 255, 116)')
-			$(".connect__button__btn").css('color','black')
-			$(".addcertbtn").html("Add")
-			$(".Course__remove__btn").html("Remove")
-			$(".addcoursebtn").html("Add")
-			$(".addcertbtn").prop('disabled', false)
-			$(".Course__remove__btn").prop('disabled', false)
-			$(".addcoursebtn").prop('disabled', false)
-		} else {
-			$(".connect__button__btn").html("Wrong Account")
-			$(".connect__button__btn").css('background-color','rgb(194, 81, 194)') 
-			$(".connect__button__btn").css('color','white') 
-			$(".addcertbtn").html("Connect")
-			$(".Course__remove__btn").html("Connect")
-			$(".addcoursebtn").html("Connect")
-			$(".addcertbtn").prop('disabled', true)
-			$(".Course__remove__btn").prop('disabled', true)
-			$(".addcoursebtn").prop('disabled', true)
+
+	lay2con.methods.owner().call((err, _owner) => {
+		ownerAddress = _owner
+		$("#ownerAddress").html("Owner Address: "+_owner)
+		if(isConnectToMetamask) {
+			if(accounts[0].toLowerCase() != ownerAddress.toLowerCase()) {
+				$(".connect__button__btn").html("Wrong Account")
+			} else if(chainId != "0x61"){
+				$(".connect__button__btn").html("Wrong Chain")
+			} else {
+				$(".connect__button__btn").html("Ready")
+				$(".connect__button__btn").css('background-color','rgb(132, 255, 116)')
+				$(".connect__button__btn").css('color','black')
+				$(".addcertbtn").html("Add")
+				$(".Course__remove__btn").html("Remove")
+				$(".addcoursebtn").html("Add")
+				$(".addcertbtn").prop('disabled', false)
+				$(".Course__remove__btn").prop('disabled', false)
+				$(".addcoursebtn").prop('disabled', false)
+			}
 		}
-	} else {
-		$(".connect__button__btn").html("Wrong Chain")
-			$(".connect__button__btn").css('background-color','rgb(194, 81, 194)') 
-			$(".connect__button__btn").css('color','white') 
-			$(".addcertbtn").html("Connect")
-			$(".Course__remove__btn").html("Connect")
-			$(".addcoursebtn").html("Connect")
-			$(".addcertbtn").prop('disabled', true)
-			$(".Course__remove__btn").prop('disabled', true)
-			$(".addcoursebtn").prop('disabled', true)
-	}
+	})
+
+	lay2con.methods.programCount().call((err, prgcount) => {
+		add(prgcount)
+		for(let i = 0; i < prgcount; i++) {
+			lay2con.methods.allPrograms(i).call((err,program) => {
+				const lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
+				$("#address"+String(i)).html("Address: " + program.programContractAddress)
+				lay3con.methods.programId().call((err, _id) => {
+					$("#id"+String(i)).html("Id: "+_id)
+				})
+				lay3con.methods.programName().call((err, _name) => {
+					$("#name"+String(i)).html(_name)
+				})
+				lay3con.methods.link().call((err, _link) => {
+					$("#info"+String(i)).html(_link)
+				})
+				lay3con.methods.programPic().call((err, _pic) => {
+					$("#image"+String(i)).attr("src", "https://gateway.pinata.cloud/ipfs/"+_pic)
+				})
+			})
+		}
+	})
+}
+
+$(".connect__button__btn").click(async() => {
+	accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+	await ethereum.request({ method: 'eth_chainId' }).then(_chainId => {
+		chainId = _chainId;
+		if(_chainId == "0x61"){
+			web3 = new Web3(window.ethereum);
+			startApp()
+			return true;
+		} else {
+			ethereum.request({
+				method: 'wallet_addEthereumChain',
+				params: [{ "chainId": "0x61", "chainName": "BSC testnet", "rpcUrls": ["https://data-seed-prebsc-1-s1.binance.org:8545/"], "nativeCurrency": { "name": "Binance Coin", "symbol": "BNB", "decimals": 18 } }]
+			})
+			web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/")
+			startApp()
+			return true;
+		}
+	})
+})
+window.ethereum.on('disconnect', function() {
+	window.location.reload()
+});
+window.ethereum.on('chainChanged', function(_chainId) {
+	window.location.reload()
 });
 
 window.ethereum.on('accountsChanged', function (newAcc) {

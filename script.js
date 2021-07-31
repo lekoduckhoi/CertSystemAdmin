@@ -47,6 +47,59 @@ myFile.onchange = e => {
   }
 }
 
+function add(n){
+  for(var i=0;i<n;i++){
+  const course = document.createElement('div')
+  course.classList.add('course')
+  course.innerHTML =
+  `<div class="course__image">
+    <img id="image${i}" src="" alt="course image preview">
+  </div>
+  <div class="courseinfo">
+    <h2 id="name${i}" class="courseinfo__name"></h2>
+    <p id="id${i}" class="courseinfo__id">ID: </p>
+    <p id="issued${i}" class="courseinfo__issued">Issued by: Vietnam Institute for Advanced Study in Mathematics (VIASM)</p>
+    <p id="address${i}" class="courseinfo__address">Address: }</p>
+    <p class="courseinfo__info">Info: <a id="info${i}" href=""></a></p>
+  </div>
+  <div class="course__button">
+    <button onclick="gotoProgram(${i})" class="gotocert">Add</button>
+  </div>`
+  $("#courses").append(course)
+}}
+
+document.querySelector('.backtocourse').addEventListener('click',function(){
+  $('.certblock').css('left','50%')
+})
+
+function gotoProgram(n) {
+  $('.certblock').css('left','-50%')
+  lay2con.methods.allPrograms(n).call((err,program) => {
+		findByAddress = program.programContractAddress
+    let lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
+		$('.courseinfo__add__address').html("Address: " + program.programContractAddress)
+		lay3con.methods.programId().call((err, _id) => {
+			$('.courseinfo__add__id').html("Id: "+_id)
+		})
+		lay3con.methods.programName().call((err, _name) => {
+			$('.courseinfo__add__name').html(_name)
+		})
+		lay3con.methods.link().call((err, _link) => {
+			$('.courseinfo__add__info__a').html(_link)
+		})
+		lay3con.methods.programPic().call((err, _pic) => {
+			$('.course__add__image__src').attr("src", "https://gateway.pinata.cloud/ipfs/"+_pic)
+		})
+	})
+	setTimeout(function(){
+		const backtv = document.querySelector('.backtocourse')
+		backtv.scrollIntoView();
+		const backtv1 = document.querySelector('body')
+		backtv1.scrollIntoView();
+	  },1500)
+  
+}
+
 // SHA1 function
 function SHA1(msg){function rotate_left(n,s){var t4=(n<<s)|(n>>>(32-s));return t4;};function lsb_hex(val){var str='';var i;var vh;var vl;for(i=0;i<=6;i+=2){vh=(val>>>(i*4+4))&0x0f;vl=(val>>>(i*4))&0x0f;str+=vh.toString(16)+vl.toString(16);}
 return str;};function cvt_hex(val){var str='';var i;var v;for(i=7;i>=0;i--){v=(val>>>(i*4))&0x0f;str+=v.toString(16);}
