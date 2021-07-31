@@ -1034,10 +1034,11 @@ function startApp() {
 				$(".addcertbtn").prop('disabled', false)
 				$(".Course__remove__btn").prop('disabled', false)
 				$(".addcoursebtn").prop('disabled', false)
+				$(".connect__button__btn").prop('disabled', true)
 			}
 		}
 	})
-
+	$("#courses").empty()
 	lay2con.methods.programCount().call((err, prgcount) => {
 		add(prgcount)
 		for(let i = 0; i < prgcount; i++) {
