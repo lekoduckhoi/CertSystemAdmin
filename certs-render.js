@@ -1160,6 +1160,7 @@ function admin_addcourse(){
 						alert("Successfully adding new course")
 						$(".addcoursebtn").prop('disabled', false)
 						$("#loadaddcourse").html("")
+						startApp()
 					})
 					.on('error', function(er){
 						console.log(er);
