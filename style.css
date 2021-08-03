@@ -341,26 +341,32 @@ h2{
   padding: 2rem;
   width: 60%;
 }
-.Course__name,.Course__link{
+.Course__name,.Course__link,.Course__date,.Course__issued{
   font-size: 1.5rem;
   margin-top: .4rem;
 }
-#Course__name,#Course__link{
+#Course__name,#Course__link, #Course__date, #Course__issued{
   padding: .5rem 1rem ;
-  width: 80%;
+  width: 70%;
 }
-.addcourse__right__name{
-  margin-bottom: 2rem;
+.addcourse__right__name,.addcourse__right__link,.addcourse__right__date{
+  margin-bottom: 1rem;
+}
+#Course__name{
+  margin-left: 2.7rem;
 }
 #Course__link{
-  margin-left: 1.2rem;
+  margin-left: 4rem;
+}
+#Course__date{
+  margin-left: 3.55rem;
 }
 .addcourse__right__button{
   margin: 2rem 2rem;
-  padding: 0 2rem;
+  padding: 0 4.8rem;
 }
 .addcoursebtn{
-  padding: 1rem 4rem;
+  padding: 1rem 6rem;
   margin-left: 1.2rem;
   background: #08addf;
   border: none;

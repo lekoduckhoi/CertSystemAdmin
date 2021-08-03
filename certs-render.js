@@ -9,8 +9,8 @@ var findByAddress
 var accounts
 var chainId
 var isConnectToMetamask          
-const lay1Address = "0x8747C81f78ed53EE20E10014109c1bFda529Ca13"
-const lay2Address = "0x1A1e755b51fB6e9b1F44Fc7F72F3712018442694"
+const lay1Address = "0xcb0A065aBc63C3066d17FEA31A0f950f69f1869B"
+const lay2Address = "0x654408979976c7b73ac1755dd4Bb2B528E95c3DA"
 const lay1Abi = [
 	{
 		"inputs": [],
@@ -31,11 +31,6 @@ const lay1Abi = [
 						"internalType": "string",
 						"name": "orgName",
 						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "orgOwner",
-						"type": "address"
 					},
 					{
 						"internalType": "address",
@@ -71,11 +66,6 @@ const lay1Abi = [
 				"internalType": "string",
 				"name": "orgName",
 				"type": "string"
-			},
-			{
-				"internalType": "address",
-				"name": "orgOwner",
-				"type": "address"
 			},
 			{
 				"internalType": "address",
@@ -349,61 +339,6 @@ const lay2Abi = [
 		"type": "event"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"components": [
-					{
-						"internalType": "uint256",
-						"name": "id",
-						"type": "uint256"
-					},
-					{
-						"internalType": "string",
-						"name": "name",
-						"type": "string"
-					},
-					{
-						"internalType": "address",
-						"name": "programContractAddress",
-						"type": "address"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct OrganizationContract.Program",
-				"name": "",
-				"type": "tuple"
-			}
-		],
-		"name": "RemoveProgram",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "OrgId",
-				"type": "uint256"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "OrgName",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "Orglink",
-				"type": "string"
-			}
-		],
-		"name": "UpdateInfo",
-		"type": "event"
-	},
-	{
 		"inputs": [
 			{
 				"internalType": "string",
@@ -418,6 +353,16 @@ const lay2Abi = [
 			{
 				"internalType": "string",
 				"name": "_link",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_issuedBy",
 				"type": "string"
 			}
 		],
@@ -613,11 +558,6 @@ const lay2Abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_orgId",
-				"type": "uint256"
-			},
-			{
 				"internalType": "string",
 				"name": "_orgName",
 				"type": "string"
@@ -643,11 +583,6 @@ const lay3Abi = [
 	{
 		"inputs": [
 			{
-				"internalType": "uint256",
-				"name": "_programId",
-				"type": "uint256"
-			},
-			{
 				"internalType": "string",
 				"name": "_programName",
 				"type": "string"
@@ -660,6 +595,16 @@ const lay3Abi = [
 			{
 				"internalType": "string",
 				"name": "_link",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_issuedBy",
 				"type": "string"
 			}
 		],
@@ -734,31 +679,6 @@ const lay3Abi = [
 			}
 		],
 		"name": "RemoveCertificate",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "ProgramName",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "Pic",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "Link",
-				"type": "string"
-			}
-		],
-		"name": "UpdateInfo",
 		"type": "event"
 	},
 	{
@@ -839,6 +759,45 @@ const lay3Abi = [
 	},
 	{
 		"inputs": [],
+		"name": "date",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "issuedBy",
+		"outputs": [
+			{
+				"internalType": "string",
+				"name": "",
+				"type": "string"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "layer2Contract",
+		"outputs": [
+			{
+				"internalType": "contract OrganizationContract",
+				"name": "",
+				"type": "address"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
 		"name": "link",
 		"outputs": [
 			{
@@ -852,38 +811,12 @@ const lay3Abi = [
 	},
 	{
 		"inputs": [],
-		"name": "orgAddress",
-		"outputs": [
-			{
-				"internalType": "address",
-				"name": "",
-				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "owner",
 		"outputs": [
 			{
 				"internalType": "address",
 				"name": "",
 				"type": "address"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "programId",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -970,6 +903,16 @@ const lay3Abi = [
 				"internalType": "string",
 				"name": "_link",
 				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_date",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_issuedBy",
+				"type": "string"
 			}
 		],
 		"name": "updateInfo",
@@ -1045,8 +988,8 @@ function startApp() {
 			lay2con.methods.allPrograms(i).call((err,program) => {
 				const lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
 				$("#address"+String(i)).html("Address: " + program.programContractAddress)
-				lay3con.methods.programId().call((err, _id) => {
-					$("#id"+String(i)).html("Id: "+_id)
+				lay3con.methods.date().call((err, _date) => {
+					$("#date"+String(i)).html("Date: "+_date)
 				})
 				lay3con.methods.programName().call((err, _name) => {
 					$("#name"+String(i)).html(_name)
@@ -1056,6 +999,9 @@ function startApp() {
 				})
 				lay3con.methods.programPic().call((err, _pic) => {
 					$("#image"+String(i)).attr("src", "https://gateway.pinata.cloud/ipfs/"+_pic)
+				})
+				lay3con.methods.issuedBy().call((err, _issued) => {
+					$("#issued"+String(i)).html("Issued By: " + _issued)
 				})
 			})
 		}
@@ -1131,9 +1077,11 @@ var inpFile = document.getElementById("myFile");
 function admin_addcourse(){
 	var cname = $("#Course__name").val()
 	var clink = $("#Course__link").val()
+	var cissued = $("#Course__issued").val()
+	var cdate = $("#Course__date").val()
 	file = inpFile.files[0]
-	if(cname == "" || clink == ""){
-		alert("Please type name and link")
+	if(cname == "" || clink == "" || cdate == "" || cissued == ""){
+		alert("Please type name,link, date and issuedBy")
 	} else if(file == undefined) {
 		alert("Please chose an image")
 	} else {
@@ -1152,8 +1100,8 @@ function admin_addcourse(){
             .then(function (response) {
                 
                 console.log(response.data.IpfsHash);
-				if (confirm("Bạn có chắc muốn thêm khóa học với \nName: "+cname+"\nLink: "+clink+"\nIpfs: "+response.data.IpfsHash)) {
-					lay2con.methods.addNewProgram(cname, response.data.IpfsHash, clink).send({from: accounts[0]})
+				if (confirm("Bạn có chắc muốn thêm khóa học với \nName: "+cname+"\nLink: "+clink+"\nIpfs: "+response.data.IpfsHash+"\nDate: "+cdate+"\nIssued By: "+cissued)) {
+					lay2con.methods.addNewProgram(cname, response.data.IpfsHash, clink, cdate, cissued).send({from: accounts[0]})
 					.on('receipt', function(receipt){
 						// receipt example
 						console.log(receipt);

@@ -57,10 +57,10 @@ function add(n){
   </div>
   <div class="courseinfo">
     <h2 id="name${i}" class="courseinfo__name"></h2>
-    <p id="id${i}" class="courseinfo__id">ID: </p>
+    <p id="date${i}" class="courseinfo__date">Date: </p>
     <p id="issued${i}" class="courseinfo__issued">Issued by: Vietnam Institute for Advanced Study in Mathematics (VIASM)</p>
     <p id="address${i}" class="courseinfo__address">Address: }</p>
-    <p class="courseinfo__info">Info: <a id="info${i}" href=""></a></p>
+    <p class="courseinfo__info">Information: <a id="info${i}" href=""></a></p>
   </div>
   <div class="course__button">
     <button onclick="gotoProgram(${i})" class="gotocert">Add</button>
@@ -78,8 +78,8 @@ function gotoProgram(n) {
 		findByAddress = program.programContractAddress
     let lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
 		$('.courseinfo__add__address').html("Address: " + program.programContractAddress)
-		lay3con.methods.programId().call((err, _id) => {
-			$('.courseinfo__add__id').html("Id: "+_id)
+		lay3con.methods.date().call((err, _date) => {
+			$('.courseinfo__add__date').html("Date: "+_date)
 		})
 		lay3con.methods.programName().call((err, _name) => {
 			$('.courseinfo__add__name').html(_name)
@@ -90,6 +90,9 @@ function gotoProgram(n) {
 		lay3con.methods.programPic().call((err, _pic) => {
 			$('.course__add__image__src').attr("src", "https://gateway.pinata.cloud/ipfs/"+_pic)
 		})
+    lay3con.methods.issuedBy().call((err, _issuedBy) => {
+      $('.courseinfo__add__issued').html("Issued by: " + _issuedBy)
+    })
 	})
 	setTimeout(function(){
 		const backtv = document.querySelector('.backtocourse')
