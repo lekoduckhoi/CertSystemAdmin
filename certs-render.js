@@ -1014,7 +1014,6 @@ $(".connect__button__btn").click(async() => {
 		isConnectToMetamask = true;
 		chainId = _chainId;
 		if(_chainId == "0x61"){
-
 			web3 = new Web3(window.ethereum);
 			startApp()
 			return true;
