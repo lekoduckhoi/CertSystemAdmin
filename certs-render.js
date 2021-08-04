@@ -1011,8 +1011,10 @@ function startApp() {
 $(".connect__button__btn").click(async() => {
 	accounts = await ethereum.request({ method: 'eth_requestAccounts' });
 	await ethereum.request({ method: 'eth_chainId' }).then(_chainId => {
+		isConnectToMetamask = true;
 		chainId = _chainId;
 		if(_chainId == "0x61"){
+
 			web3 = new Web3(window.ethereum);
 			startApp()
 			return true;
