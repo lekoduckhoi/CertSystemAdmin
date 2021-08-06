@@ -48,7 +48,7 @@ myFile.onchange = e => {
 }
 
 function add(n){
-  for(var i=0;i<n;i++){
+  for(var i=n-1;i>=0;i--){
   const course = document.createElement('div')
   course.classList.add('course')
   course.innerHTML =
@@ -57,10 +57,10 @@ function add(n){
   </div>
   <div class="courseinfo">
     <h2 id="name${i}" class="courseinfo__name"></h2>
-    <p id="date${i}" class="courseinfo__date">Date: </p>
-    <p id="issued${i}" class="courseinfo__issued">Issued by: Vietnam Institute for Advanced Study in Mathematics (VIASM)</p>
-    <p id="address${i}" class="courseinfo__address">Address: }</p>
-    <p class="courseinfo__info">Information: <a id="info${i}" href=""></a></p>
+	  <p id="id${i}" class="courseinfo__id">Course Id: }</p>
+  	<p id="date${i}" class="courseinfo__date">Date: </p>
+  	<p id="issued${i}" class="courseinfo__issued">Issued by: Vietnam Institute for Advanced Study in Mathematics (VIASM)</p>
+  	<p class="courseinfo__info">Course Information: <a id="info${i}" href=""></a></p>
   </div>
   <div class="course__button">
     <button onclick="gotoProgram(${i})" class="gotocert">Add</button>
@@ -77,7 +77,7 @@ function gotoProgram(n) {
   lay2con.methods.allPrograms(n).call((err,program) => {
 		findByAddress = program.programContractAddress
     let lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
-		$('.courseinfo__add__address').html("Address: " + program.programContractAddress)
+		$('.courseinfo__add__id').html("Id: " + n)
 		lay3con.methods.date().call((err, _date) => {
 			$('.courseinfo__add__date').html("Date: "+_date)
 		})

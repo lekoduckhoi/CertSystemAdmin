@@ -229,7 +229,7 @@ h1{
   font-size: 2rem;
   margin-bottom: 2rem;
 }
-.courseinfo__add__address,.courseinfo__address{
+.courseinfo__add__id,.courseinfo__address{
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;

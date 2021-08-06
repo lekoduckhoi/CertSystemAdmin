@@ -987,7 +987,7 @@ function startApp() {
 		for(let i = 0; i < prgcount; i++) {
 			lay2con.methods.allPrograms(i).call((err,program) => {
 				const lay3con = new web3.eth.Contract(lay3Abi, program.programContractAddress)
-				$("#address"+String(i)).html("Address: " + program.programContractAddress)
+				$("#id"+String(i)).html("Id: " + i)
 				lay3con.methods.date().call((err, _date) => {
 					$("#date"+String(i)).html("Date: "+_date)
 				})
@@ -1101,7 +1101,7 @@ function admin_addcourse(){
             .then(function (response) {
                 
                 console.log(response.data.IpfsHash);
-				if (confirm("Bạn có chắc muốn thêm khóa học với \nName: "+cname+"\nLink: "+clink+"\nIpfs: "+response.data.IpfsHash+"\nDate: "+cdate+"\nIssued By: "+cissued)) {
+				if (confirm("Bạn có chắc muốn thêm khóa học với \nName: "+cname+"\nLink: "+clink+"\nDate: "+cdate+"\nIssued By: "+cissued)) {
 					lay2con.methods.addNewProgram(cname, response.data.IpfsHash, clink, cdate, cissued).send({from: accounts[0]})
 					.on('receipt', function(receipt){
 						// receipt example
@@ -1147,39 +1147,41 @@ function addcert(){
 		$("#loadaddcert").html("Adding new Certificate, please wait...")
 		let data = new FormData();
         data.append('file', file2);
-		axios.post(`https://api.pinata.cloud/pinning/pinFileToIPFS`, data, {
-                    maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
-                    headers: {
-                        'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
-                        pinata_api_key: "fe8a1f46de05dcc4ad7e",
-                        pinata_secret_api_key: "3ae4d4e22fa0121975850eb3234a9e212e532e6d5e6e8ff544fa371e33af3fd2"
-                    }
-                })
-            .then(function (response) {
-                console.log(response.data.IpfsHash);
-				let lay3con = new web3.eth.Contract(lay3Abi, findByAddress)
-				lay3con.methods.addNewCerificate(nname, nid, response.data.IpfsHash).send({from: accounts[0]})
-				.on('receipt', function(receipt){
-					// receipt example
-					console.log(receipt);
-					$(".addcertbtn").prop('disabled', false)
-					$("#loadaddcert").html("")
-				})
-				.on('error', function(er){
-					console.log(er);
-					alert("Can't add new Course")
-					$(".addcertbtn").prop('disabled', false)
-					$("#loadaddcert").html("")
-				})
-				.catch(function (e) {
-					console.log("Transaction Rejected")
-					$(".addcertbtn").prop('disabled', false)
-					$("#loadaddcert").html("")
-				})
-            })
-            .catch(function (error) {
-                alert("Something is wrong I guess")
-            });
+		if (confirm("Bạn có chắc muốn thêm Certìicate với \nName: "+nname+"\nId: "+nid)) {
+			axios.post(`https://api.pinata.cloud/pinning/pinFileToIPFS`, data, {
+        	            maxBodyLength: 'Infinity', //this is needed to prevent axios from erroring out with large files
+        	            headers: {
+        	                'Content-Type': `multipart/form-data; boundary=${data._boundary}`,
+        	                pinata_api_key: "fe8a1f46de05dcc4ad7e",
+        	                pinata_secret_api_key: "3ae4d4e22fa0121975850eb3234a9e212e532e6d5e6e8ff544fa371e33af3fd2"
+        	            }
+        	        })
+        	    .then(function (response) {
+        	        console.log(response.data.IpfsHash);
+					let lay3con = new web3.eth.Contract(lay3Abi, findByAddress)
+					lay3con.methods.addNewCerificate(nname, nid, response.data.IpfsHash).send({from: accounts[0]})
+					.on('receipt', function(receipt){
+						// receipt example
+						console.log(receipt);
+						$(".addcertbtn").prop('disabled', false)
+						$("#loadaddcert").html("")
+					})
+					.on('error', function(er){
+						console.log(er);
+						alert("Can't add new Course")
+						$(".addcertbtn").prop('disabled', false)
+						$("#loadaddcert").html("")
+					})
+					.catch(function (e) {
+						console.log("Transaction Rejected")
+						$(".addcertbtn").prop('disabled', false)
+						$("#loadaddcert").html("")
+					})
+        	    })
+        	    .catch(function (error) {
+        	        alert("Something is wrong I guess")
+        	    });
+		}
 	}
 }
 	
