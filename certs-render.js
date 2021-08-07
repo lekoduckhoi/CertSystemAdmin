@@ -9,8 +9,8 @@ var findByAddress
 var accounts
 var chainId
 var isConnectToMetamask          
-const lay1Address = "0xcb0A065aBc63C3066d17FEA31A0f950f69f1869B"
-const lay2Address = "0x654408979976c7b73ac1755dd4Bb2B528E95c3DA"
+const lay1Address = "0x65c7B6d15F3883a08B9009690B9206AAf2b021c4"
+const lay2Address = "0x8D325a1b27FeaFEE9E35B8EDd52A0f89743C80da"
 const lay1Abi = [
 	{
 		"inputs": [],
@@ -932,23 +932,23 @@ window.addEventListener('load', async() => {
 			//chainId = await ethereum.request({ method: 'eth_chainId' });
 			await ethereum.request({ method: 'eth_chainId' }).then(_chainId => {
 				chainId = _chainId;
-				if(_chainId == "0x61"){
+				if(_chainId == "0x38"){
 					web3 = new Web3(window.ethereum);
 					startApp()
 					return true;
 				} else {
 					ethereum.request({
 						method: 'wallet_addEthereumChain',
-						params: [{ "chainId": "0x61", "chainName": "BSC testnet", "rpcUrls": ["https://data-seed-prebsc-1-s1.binance.org:8545/"], "nativeCurrency": { "name": "Binance Coin", "symbol": "BNB", "decimals": 18 } }]
+						params: [{ "chainId": "0x38", "chainName": "BSC Mainnet", "rpcUrls": ["https://bsc-dataseed.binance.org/"], "nativeCurrency": { "name": "Binance Coin", "symbol": "BNB", "decimals": 18 } }]
 					})
-					web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/")
+					web3 = new Web3("https://bsc-dataseed.binance.org/")
 					startApp()
 					return true;
 				}
 			})
 		} else {
 			console.log("pls install metamask")
-    		web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/")
+    		web3 = new Web3("https://bsc-dataseed.binance.org/")
 			startApp()
 			return false;
 		}
@@ -965,7 +965,7 @@ function startApp() {
 		if(isConnectToMetamask) {
 			if(accounts[0].toLowerCase() != ownerAddress.toLowerCase()) {
 				$(".connect__button__btn").html("Wrong Account")
-			} else if(chainId != "0x61"){
+			} else if(chainId != "0x38"){
 				$(".connect__button__btn").html("Wrong Chain")
 			} else {
 				$(".connect__button__btn").html("Ready")
@@ -1013,16 +1013,16 @@ $(".connect__button__btn").click(async() => {
 	await ethereum.request({ method: 'eth_chainId' }).then(_chainId => {
 		isConnectToMetamask = true;
 		chainId = _chainId;
-		if(_chainId == "0x61"){
+		if(_chainId == "0x38"){
 			web3 = new Web3(window.ethereum);
 			startApp()
 			return true;
 		} else {
 			ethereum.request({
 				method: 'wallet_addEthereumChain',
-				params: [{ "chainId": "0x61", "chainName": "BSC testnet", "rpcUrls": ["https://data-seed-prebsc-1-s1.binance.org:8545/"], "nativeCurrency": { "name": "Binance Coin", "symbol": "BNB", "decimals": 18 } }]
+				params: [{ "chainId": "0x38", "chainName": "BSC mainnet", "rpcUrls": ["https://bsc-dataseed.binance.org/"], "nativeCurrency": { "name": "Binance Coin", "symbol": "BNB", "decimals": 18 } }]
 			})
-			web3 = new Web3("https://data-seed-prebsc-1-s1.binance.org:8545/")
+			web3 = new Web3("https://bsc-dataseed.binance.org/")
 			startApp()
 			return true;
 		}
@@ -1038,7 +1038,7 @@ window.ethereum.on('chainChanged', function(_chainId) {
 window.ethereum.on('accountsChanged', function (newAcc) {
 	accounts = newAcc
 	if(newAcc[0].toLowerCase() === ownerAddress.toLowerCase()) {
-		if(chainId == "0x61"){
+		if(chainId == "0x38"){
 			$(".connect__button__btn").html("Ready")
 			$(".connect__button__btn").css('background-color','rgb(132, 255, 116)')
 			$(".connect__button__btn").css('color','black')
